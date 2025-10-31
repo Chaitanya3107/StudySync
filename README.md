@@ -61,6 +61,68 @@ cd StudySync
 
 ---
 
+## 🧩 API Flow Diagram
+
+```mermaid
+ graph TD
+    A[User] -->|Login / Register| B[Auth Controller]
+    B -->|Validate Credentials| C[Auth Service]
+    C -->|Generate Token| D[JWT Token]
+    D -->|Authorize Requests| E[Spring Security Filter]
+
+    E -->|Create Subject| F[Subject Controller]
+    F -->|Call Business Logic| G[Subject Service]
+    G -->|Store / Fetch Subjects| H[(Subject Repository)]
+
+    E -->|Create Task| I[Task Controller]
+    I -->|Call Business Logic| J[Task Service]
+    J -->|Store / Fetch Tasks| K[(Task Repository)]
+
+    E -->|Join Focus Room| L[FocusRoom Controller]
+    L -->|Handle Real-Time Events| M[FocusRoom Service]
+    M -->|Broadcast Updates| N[(Active WebSocket Sessions)]
+
+    H -->|Read/Write Data| O[(MySQL Database)]
+    K -->|Read/Write Data| O
+    M -->|Optional persistence| O
+
+    A -->|Owns| F
+    F -->|Has Many| I
+    I -->|Belongs To| F
+
+    subgraph Authentication Layer
+        B
+        C
+        D
+        E
+    end
+
+    subgraph Core Application
+        F
+        G
+        H
+        I
+        J
+        K
+    end
+
+    subgraph Real-Time Layer
+        L
+        M
+        N
+    end
+
+    subgraph Data Layer
+        O
+    end
+
+    classDef core fill:#2563eb,stroke:#1e3a8a,color:#fff,stroke-width:1px;
+    classDef data fill:#047857,stroke:#064e3b,color:#fff,stroke-width:1px;
+    class A,B,C,D,E,F,G,H,I,J,K,L,M,N core;
+    class O data;
+
+```
+
 ## 📦 Future Work
   - Scheduled Email Reminders - Send automatic email notifications for incomplete tasks.
   - AI Study Assistant - Integrate Spring AI to summarize notes and answer study questions.
